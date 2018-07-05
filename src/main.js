@@ -23,9 +23,9 @@ export default {
         pages  : ['pages/logs/main', '^pages/index/main'],
         window : {
             backgroundTextStyle          : 'light',
-            navigationBarBackgroundColor : '#fff',
-            navigationBarTitleText       : 'WeChat',
-            navigationBarTextStyle       : 'black'
+            navigationBarBackgroundColor : '#82a5ff',
+            navigationBarTitleText       : '男生女生最爱小测试',
+            navigationBarTextStyle       : 'white'
         }
     }
 }

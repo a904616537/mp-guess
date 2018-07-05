@@ -1,105 +1,129 @@
 <template>
-  <div class="container" @click="clickHandle('test click', $event)">
-
-    <div class="userinfo" @click="bindViewTap">
-      <img class="userinfo-avatar" v-if="userInfo.avatarUrl" :src="userInfo.avatarUrl" background-size="cover" />
-      <div class="userinfo-nickname">
-        <card :text="userInfo.nickName"></card>
-      </div>
-    </div>
-
-    <div class="usermotto">
-      <div class="user-motto">
-        <card :text="motto"></card>
-      </div>
-    </div>
-
-    <form class="form-container">
-      <input type="text" class="form-control" v-model="motto" placeholder="v-model" />
-      <input type="text" class="form-control" v-model.lazy="motto" placeholder="v-model.lazy" />
-    </form>
-    <a href="/pages/counter/main" class="counter">去往Vuex示例页面</a>
-  </div>
+	<div class="index">
+		<div class="banner" style="background-image: url('/static/img/banner.png')">
+			<div class="banner-title" style="background-image: url('/static/img/title-bg.png')">测试：看看你能抓到它吗？</div>
+		</div>
+		<div class="content">
+			<div class="inner">
+				<div class="item clearfloat">
+					<div class="left">
+						<div class="item-img" style="background-image: url('/static/img/icon.png')"></div>
+					</div>
+					<div class="right">
+						<div class="title">{{title}}</div>
+						<div class="number">{{number}}万人</div>
+					</div>
+				</div>
+				<div class="item clearfloat">
+					<div class="left">
+						<div class="item-img" style="background-image: url('/static/img/icon.png')"></div>
+					</div>
+					<div class="right">
+						<div class="title">{{title}}</div>
+						<div class="number">{{number}}万人</div>
+					</div>
+				</div>
+				<div class="item clearfloat">
+					<div class="left">
+						<div class="item-img" style="background-image: url('/static/img/icon.png')"></div>
+					</div>
+					<div class="right">
+						<div class="title">{{title}}</div>
+						<div class="number">{{number}}万人</div>
+					</div>
+				</div>
+				<div class="item clearfloat">
+					<div class="left">
+						<div class="item-img" style="background-image: url('/static/img/icon.png')"></div>
+					</div>
+					<div class="right">
+						<div class="title">{{title}}</div>
+						<div class="number">{{number}}万人</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </template>
 
 <script>
-import card from '@/components/card'
-
-export default {
-  data () {
-    return {
-      motto: 'Hello World',
-      userInfo: {}
-    }
-  },
-
-  components: {
-    card
-  },
-
-  methods: {
-    bindViewTap () {
-      const url = '../logs/main'
-      wx.navigateTo({ url })
-    },
-    getUserInfo () {
-      // 调用登录接口
-      wx.login({
-        success: () => {
-          wx.getUserInfo({
-            success: (res) => {
-              this.userInfo = res.userInfo
-            }
-          })
-        }
-      })
-    },
-    clickHandle (msg, ev) {
-      console.log('clickHandle:', msg, ev)
-    }
-  },
-
-  created () {
-    // 调用应用实例的方法获取全局数据
-    this.getUserInfo()
-  }
-}
+	export default{
+		data() {
+			return {
+				title: '测试：测你能驯服哪种男人？',
+				number: '1.0'
+			}
+		}
+	}
 </script>
 
-<style scoped>
-.userinfo {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.userinfo-avatar {
-  width: 128rpx;
-  height: 128rpx;
-  margin: 20rpx;
-  border-radius: 50%;
-}
-
-.userinfo-nickname {
-  color: #aaa;
-}
-
-.usermotto {
-  margin-top: 150px;
-}
-
-.form-control {
-  display: block;
-  padding: 0 12px;
-  margin-bottom: 5px;
-  border: 1px solid #ccc;
-}
-
-.counter {
-  display: inline-block;
-  margin: 10px auto;
-  padding: 5px 10px;
-  color: blue;
-  border: 1px solid blue;
-}
+<style>
+	Page{
+		background-color: #e7e7e7;
+	}
+	.index .banner{
+		width: 100%;
+		height: 400rpx;
+		background-size: cover;
+		position: relative;
+	}
+	.index .banner-title{
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		color: #fff;
+		text-align: center;
+		font-size: 40rpx;
+		line-height: 68rpx;
+	}
+	.index .inner{
+		margin: 40rpx;
+		background-color: #fff;
+		border-radius: 10rpx;
+		padding: 20rpx 10rpx 20rpx 20rpx;
+		overflow: hidden;
+		font-size: 26rpx;
+	}
+	.index .item{
+		width: 100%;
+		position: relative;
+		margin-bottom: 40rpx;
+	}
+	.index .left{
+		float: left;
+	}
+	.index .right{
+		float: right;
+		height: 140rpx;
+		width: 420rpx;
+	}
+	.index .right .title{
+		background-color: #82a5ff;
+		border-radius: 5rpx;
+		color: #fff;
+		padding: 0 10rpx;
+		line-height: 50rpx;
+	}
+	.index .right .number{
+		position: absolute;
+		bottom: 0;
+		color: red;
+		font-size: 30rpx;
+	}
+	.index .clearfloat{
+		content: '';
+		clear: both;
+		display: table;
+		height: 0;
+		overflow: hidden;
+	}
+	.index .item-img{
+		width: 136rpx;
+		height: 136rpx;
+		background-size: cover;
+		overflow: hidden;
+		border-radius: 10rpx;
+		border: 4rpx solid #82a5ff;
+	}
 </style>
