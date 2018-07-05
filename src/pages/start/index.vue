@@ -8,7 +8,7 @@
 			<div class="answer">5只</div>
 			<div class="answer">9只以上</div>
 		</div>
-		<div class="footer-btn">开始测试</div>
+		<div class="footer-btn" @click="result">开始测试</div>
 	</div>
 </template>
 
@@ -19,6 +19,12 @@
 				number: '1',
 				count: '1',
 				question: '你能从中看到多少只海豚？'
+			}
+		},
+		methods: {
+			result() {
+				const url = ',,/result/main'
+				wx.navigateTo({url})
 			}
 		}
 	}
