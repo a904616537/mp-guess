@@ -5,7 +5,7 @@
 		</div>
 		<div class="content">
 			<div class="inner">
-				<div class="item clearfloat">
+				<div class="item clearfloat" @click='click'>
 					<div class="left">
 						<div class="item-img" style="background-image: url('/static/img/icon.png')"></div>
 					</div>
@@ -52,6 +52,12 @@
 			return {
 				title: '测试：测你能驯服哪种男人？',
 				number: '1.0'
+			}
+		},
+		methods: {
+			click() {
+				const url = '../test/main'
+				wx.navigateTo({url})
 			}
 		}
 	}
@@ -108,7 +114,7 @@
 	.index .right .number{
 		position: absolute;
 		bottom: 0;
-		color: red;
+		color: #fe6060;
 		font-size: 30rpx;
 	}
 	.index .clearfloat{
