@@ -29,7 +29,7 @@
 		},
 		methods: {
 			start() {
-				url = '../start/main'
+				const url = '../start/main'
 				wx.navigateTo({url})
 			},
 			share() {
