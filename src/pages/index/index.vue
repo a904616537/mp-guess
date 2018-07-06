@@ -43,21 +43,32 @@
 				</div>
 			</div>
 		</div>
+
+		<v-login :show="show" :close="onClose"></v-login>
 	</div>
 </template>
 
 <script>
+	import Login from '@/components/login'
+
 	export default{
 		data() {
 			return {
+				show: true,
 				title: '测试：测你能驯服哪种男人？',
 				number: '1.0'
 			}
+		},
+		components: {
+			'v-login' : Login
 		},
 		methods: {
 			click() {
 				const url = '../test/main'
 				wx.navigateTo({url})
+			},
+			onClose() {
+				this.show = false
 			}
 		}
 	}
@@ -83,8 +94,10 @@
 		font-size: 40rpx;
 		line-height: 68rpx;
 	}
+	.index .content{
+		padding: 40rpx;
+	}
 	.index .inner{
-		margin: 40rpx;
 		background-color: #fff;
 		border-radius: 10rpx;
 		padding: 20rpx 10rpx 20rpx 20rpx;

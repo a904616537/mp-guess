@@ -9,3 +9,7 @@
 // export const getBanner = (state, getters) => {
 // 	return state.Banner.banner.filter(val => val.type === '2')
 // }
+
+export const isLogin = (state, getters) => {
+
+}
