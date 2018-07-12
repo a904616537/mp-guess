@@ -1,36 +1,55 @@
 <template>
 	<div class="test">
 		<div class="header">
-			<div class="title">{{title}}</div>
-			<div class="number">{{number}}人在测</div>
+			<div class="title">{{question.question_title}}</div>
+			<div class="number">{{question.all}}人在测</div>
 		</div>
-		<div class="banner" style="background-image: url('/static/img/test-banner.jpg')"></div>
-		<div class="text">{{text}}</div>
+		<div class="banner" :style="'background-image: url('+question.question_picture+')'"></div>
+		<div class="text">{{question.question_content}}</div>
 		<div class="test-btn">
-			<img src="/static/img/share.png" alt="分享给好友" class="btn-img" @click="share"/>
+			
+			<button
+			class="btn"
+			open-type="share">
+				<img src="/static/img/share.png" alt="分享给好友" class="btn-img"/>
+			</button>
 			<img src="/static/img/start.png" alt="开始测试" class="btn-img right" @click="start"/>
 		</div>
 		<div class="footer">
-			<div class="img" style="background-image: url('/static/img/advertising.png')"></div>
-			<div class="img" style="background-image: url('/static/img/advertising.png')"></div>
-			<div class="img" style="background-image: url('/static/img/advertising.png')"></div>
+			<div v-for="(item, index) in banners" :key="index" class="img" :style="'background-image: url('+item.img+')'"></div>
 		</div>
 	</div>
 </template>
 
 <script>
+	import Vue   from 'vue';
+	const {dispatch, commit, getters, state} = Vue.store;
+
 	export default{
+		onShareAppMessage(res) {
+			return {
+				title    : `${this.question.question}`,
+				path     : `/pages/index/main`,
+				imageUrl : this.question.question_picture
+			}
+	    },
 		data() {
 			return {
-				title: '一张图测试你的好色程度，准！',
-				number: '79140',
-				text: '孩子们第一眼看到的是海豚......'
 			}
 		},
+		computed: {
+	      	banners () {
+	      		const ban = state.Banner.banner.filter(v => v.type === '5');
+	        	return ban || [{img : '/static/img/advertising.png'}]
+	        },
+	        question() {
+	        	return state.Question.question || {};
+	        },
+	    },
 		methods: {
 			start() {
 				const url = '../start/main'
-				wx.navigateTo({url})
+				wx.redirectTo({url})
 			},
 			share() {
 				console.log('share')
@@ -43,6 +62,14 @@
 	Page{
 		background-color: #e7e7e7;
 	}
+	button {
+		display: inline-block;
+		border     : none;
+		background : none;
+	}
+	button::after {
+		border: none;
+	} 
 	.test{
 		padding: 0 40rpx;
 	}
@@ -60,7 +87,7 @@
 	}
 	.test .banner{
 		height: 444rpx;
-		background-size: cover;
+		background-size: 100% 100%;
 	}
 	.test .text{
 		color: #999;
@@ -81,6 +108,6 @@
 		height: 128rpx;
 		margin: 10rpx 0;
 		border-radius: 20rpx;
-		background-size: contain;
+		background-size: cover;
 	}
 </style>

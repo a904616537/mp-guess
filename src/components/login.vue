@@ -1,5 +1,5 @@
 <template>
-	<div class="login">
+	<div v-if="show" class="login">
 		<div class="mask">
 			<img src="/static/img/logo.png" alt="" class="logo-img" />
 			<p>需要授权才可以继续哦！</p>
@@ -15,7 +15,8 @@
 </template>
 
 <script>
-
+	
+	import login_help from '@/utils/login_help';
 	export default{
 		data() {
 			return {
@@ -32,6 +33,26 @@
 				default: () => {console.log('close login')}
 			}
 		},
+		methods: {
+			onGotUserInfo(e) {
+				wx.showLoading({
+					title : '加载中'
+				})
+		        login_help.onGotUserInfo(e, err => {
+		    		if(err){
+		        		wx.hideLoading();
+		    			wx.showToast({
+							title    : err,
+							icon     : 'none',
+							duration : 2000
+						})
+		    		} else {
+		    			wx.hideLoading();
+            			this.close();
+		    		}
+		    	})
+			}
+		}
 	}
 </script>
 

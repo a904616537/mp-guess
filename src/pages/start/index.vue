@@ -1,30 +1,72 @@
 <template>
 	<div class="start">
-		<div class="title">{{number}}/{{count}} {{question}}</div>
+		<div class="title">{{question.question || '小测试'}}</div>
 		<div class="content">
-			<div class="answer">1只</div>
-			<div class="answer">3只</div>
-			<div class="answer">4只</div>
-			<div class="answer">5只</div>
-			<div class="answer">9只以上</div>
+			<div
+			v-for="(item, index) in question.answer"
+			class="answer"
+			:class="{ selected : select_key === index}"
+			:key="index"
+			@click="() => onSelected(index)"
+			>{{item.text}}</div>
 		</div>
 		<div class="footer-btn" @click="result">开始测试</div>
 	</div>
 </template>
 
 <script>
+	import Vue   from 'vue';
+	const {dispatch, commit, getters, state} = Vue.store;
+
 	export default{
+		onShow() {
+			this.select_key = -1;
+		},
 		data() {
 			return{
-				number: '1',
-				count: '1',
-				question: '你能从中看到多少只海豚？'
+				select_key : -1
 			}
 		},
+		computed: {
+	        question() {
+	        	return state.Question.question || {};
+	        },
+	    },
 		methods: {
+			onSelected(index) {
+				this.select_key = index;
+			},
+			onRequest(next) {
+				const data = {
+					id : this.question.id
+				}
+				wx.request({
+					url     : `${Vue.setting.api}mobile/setQuestionNum3`,
+					data    : data,
+					success : (result, req) => {
+						console.log('提交后台结果', result);
+						if(next) next();
+		            }
+		        })
+			},
 			result() {
-				const url = ',,/result/main'
-				wx.navigateTo({url})
+				wx.showLoading({
+					title : '加载中'
+				})
+				if(this.select_key > -1) {
+					this.onRequest(() => {
+						wx.hideLoading();
+						const url = `../result/main?key=${this.select_key}`
+						wx.redirectTo({url})
+					});
+				} else {
+					wx.hideLoading();
+					wx.showToast({
+						title    : '你还没选择答案！',
+						icon     : 'none',
+						duration : 1000
+					})
+				}
 			}
 		}
 	}
@@ -61,5 +103,8 @@
 		border-radius: 15rpx;
 		text-align: center;
 		margin-top: 60rpx;
+	}
+	.start .selected {
+		background-color : #ffa168;
 	}
 </style>

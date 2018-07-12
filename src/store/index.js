@@ -12,6 +12,10 @@ import * as actions from './actions'
 import * as getters from './getters'
 import Counter      from './module/counter'
 import User         from './module/user'
+import Banner       from './module/banner'
+import Question     from './module/question'
+import SystemInfo   from './module/system'
+
 
 
 Vue.use(Vuex)
@@ -21,7 +25,10 @@ const store = new Vuex.Store({
 	getters,
 	modules : {
 		Counter,
-		User
+		User,
+		Banner,
+		Question,
+		SystemInfo
 	},
 	// strict  : debug
 })

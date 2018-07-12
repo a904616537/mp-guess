@@ -1,46 +1,23 @@
 <template>
 	<div class="index">
-		<div class="banner" style="background-image: url('/static/img/banner.png')">
-			<div class="banner-title" style="background-image: url('/static/img/title-bg.png')">测试：看看你能抓到它吗？</div>
+		<div class="banner" :style="'background-image: url('+banner.img+')'">
+			<div class="banner-title" style="background-image: url('/static/img/title-bg.png')">{{banner.content}}</div>
 		</div>
 		<div class="content">
 			<div class="inner">
-				<div class="item clearfloat" @click='click'>
+
+				<!--START 题库 -->
+				<div v-for="(item, index) in questions" :key="index" class="item clearfloat" @click='() => click(item)'>
 					<div class="left">
-						<div class="item-img" style="background-image: url('/static/img/icon.png')"></div>
+						<div class="item-img" :style="'background-image: url('+item.question_picture+')'"></div>
 					</div>
 					<div class="right">
-						<div class="title">{{title}}</div>
-						<div class="number">{{number}}万人</div>
+						<div class="title">{{item.question_title}}</div>
+						<div class="number">{{item.all}}人</div>
 					</div>
 				</div>
-				<div class="item clearfloat">
-					<div class="left">
-						<div class="item-img" style="background-image: url('/static/img/icon.png')"></div>
-					</div>
-					<div class="right">
-						<div class="title">{{title}}</div>
-						<div class="number">{{number}}万人</div>
-					</div>
-				</div>
-				<div class="item clearfloat">
-					<div class="left">
-						<div class="item-img" style="background-image: url('/static/img/icon.png')"></div>
-					</div>
-					<div class="right">
-						<div class="title">{{title}}</div>
-						<div class="number">{{number}}万人</div>
-					</div>
-				</div>
-				<div class="item clearfloat">
-					<div class="left">
-						<div class="item-img" style="background-image: url('/static/img/icon.png')"></div>
-					</div>
-					<div class="right">
-						<div class="title">{{title}}</div>
-						<div class="number">{{number}}万人</div>
-					</div>
-				</div>
+				<!--END 题库 -->
+
 			</div>
 		</div>
 
@@ -49,27 +26,76 @@
 </template>
 
 <script>
-	import Login from '@/components/login'
+	import Vue   from 'vue';
+	import Login from '@/components/login';
+
+	const {dispatch, commit, getters, state} = Vue.store;
 
 	export default{
+		onShow() {
+			this.onSetQuestion();
+		},
 		data() {
 			return {
-				show: true,
-				title: '测试：测你能驯服哪种男人？',
-				number: '1.0'
+				show : false
 			}
 		},
 		components: {
 			'v-login' : Login
 		},
+		computed: {
+	      	banner () {
+	      		const ban = state.Banner.banner.find(v => v.type === '1');
+	        	return ban || {img : '/static/img/banner.png'}
+	        },
+	        questions() {
+	        	return state.Question.questions || [];
+	        },
+	    },
 		methods: {
-			click() {
-				const url = '../test/main'
-				wx.navigateTo({url})
+			click(question) {
+				if(getters.isLogin) {
+					dispatch('setQuestion', question)
+					const url = '../test/main'
+					wx.navigateTo({url})
+				} else { this.show = true; }
 			},
 			onClose() {
 				this.show = false
+			},
+			onSetQuestion() {
+				
+				wx.request({
+					url     : `${Vue.setting.api}mobile/qa3`,
+					success : (result, req) => {
+						if(result.data.ret === 0) {
+							dispatch('onInitQuestion', result.data.data);
+						} else {
+							wx.showToast({
+								title    : '网络错误！',
+								icon     : 'none',
+								duration : 2000
+							})
+						}
+		            }
+		        })
+			},
+			onSetbanner() {
+				const data = {
+					type : 5
+				}
+				wx.request({
+					url     : `${Vue.setting.api}mobile/getPicture`,
+					data    : data,
+					success : (result, req) => {
+						console.log('result get banner', result)
+						dispatch('setBanner', result.data.picture)
+		            }
+		        })
 			}
+		},
+		beforeMount() {
+			this.onSetbanner();
 		}
 	}
 </script>

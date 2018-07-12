@@ -41,14 +41,13 @@ export default {
 				url     : `${Vue.setting.api}mobile/wx_app`,
 				data    : data,
 				success : (result, req) => {
-	            	store.commit('banner/set', result.data.contentconfig.find(val => val.id == 10));
-	            	store.commit('hall/category', result.data.category);
 	            	store.commit('user/detail', {user : result.data.user, token : result.data.login.token});
 	            	resolve();
 	            }
 	        })
 	    });
 	},
+
 	onGetUserInfo() {
 	    return new Promise((resolve, reject) => {
 	        wx.getSetting({
@@ -56,6 +55,7 @@ export default {
 	                if (res.authSetting['scope.userInfo']) {
                         this.onGetLogin()
                         .then(userdata => {
+                        	console.log('登陆服务器响应成功', userdata)
                         	// 登陆服务器响应成功
                         	const {session_key, openid} = userdata.data;
                         	
@@ -127,9 +127,15 @@ export default {
 	        wx.login({
 	            success : (res) => {
 	                if (res.code) {
+	                	const data = {
+							appid  : Vue.setting.appid,
+							secret : Vue.setting.secret,
+							code   : res.code
+	                	};
+	                	console.log('data', data)
 	                    wx.request({
 							url     : `${Vue.setting.api}mobile/wx_code`,
-							data    : { code : res.code },
+							data    : data,
 							success : (result) => resolve(result),
 							fail    : (err) => {
 	                        	console.log('err', err)

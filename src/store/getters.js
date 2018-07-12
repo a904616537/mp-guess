@@ -11,5 +11,5 @@
 // }
 
 export const isLogin = (state, getters) => {
-
+	return state.User.token? true : false;
 }
