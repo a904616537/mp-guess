@@ -57,7 +57,7 @@
 					this.onRequest(() => {
 						wx.hideLoading();
 						const url = `../result/main?key=${this.select_key}`
-						wx.redirectTo({url})
+						wx.navigateTo({url})
 					});
 				} else {
 					wx.hideLoading();

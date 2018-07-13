@@ -1,22 +1,28 @@
 <template>
-	<div class="result">
-		<div class="content">
-			<canvas canvas-id='testCanvas' :style="style"/>
+	<div>
+		<div class="result">
+			<div class="content">
+				<canvas canvas-id='testCanvas' :style="style"/>
+			</div>
+			<div class="result-btn">
+				<img src="/static/img/save.jpg" alt="保存图片" class="btn-img" @click="onSave"/>
+				<button
+				class="btn"
+				open-type="share">
+					<img src="/static/img/share-full.jpg" alt="分享给好友" class="btn-img right" @click="start"/>
+				</button>
+			</div>
+			<div class="float-img" style="background-image: url('/static/img/float-btn.png')"></div>
+
 		</div>
-		<div class="result-btn">
-			<img src="/static/img/save.jpg" alt="保存图片" class="btn-img" @click="onSave"/>
-			<button
-			class="btn"
-			open-type="share">
-				<img src="/static/img/share-full.jpg" alt="分享给好友" class="btn-img right" @click="start"/>
-			</button>
-		</div>
-		<div class="float-img" style="background-image: url('/static/img/float-btn.png')"></div>
+
+		<v-questions/>
 	</div>
 </template>
 
 <script>
 	import Vue    from 'vue';
+	import Questions     from '@/components/questions';
 
 	const {dispatch, commit, getters, state} = Vue.store;
 	export default{
@@ -29,10 +35,17 @@
 	    },
 		data() {
 			return {
-				answer_key : 0
+				answer_key   : 0,
+				marginTop    : 50,
+				marginLeft   : 70,
+				marginBottom : 0
 			}
 		},
 		beforeMount() {
+			console.log('is ios???', state.SystemInfo.system.includes("iOS"));
+			if(state.SystemInfo.system.includes("iOS")) {
+				this.marginBottom = 80;
+			}
 			wx.showLoading({
 				title : '加载中'
 			})
@@ -48,12 +61,13 @@
 			this.answer_key = Number(option.key);
 	    },
 		components: {
+			'v-questions' : Questions
 		},
 		computed: {
 			style() {
 				const width = state.SystemInfo.width;
-				const height = state.SystemInfo.height;
-				return `width : ${width - 20}px;height:540px;`
+				const height = state.SystemInfo.height - this.marginBottom;
+				return `width : ${width}px;height:${height}px;`
 			},
 			user() {
 				return state.User.user
@@ -74,8 +88,8 @@
 		methods: {
 			onSave() {
 				wx.canvasToTempFilePath({
-					width    : 320,
-					height   : 520,
+					width    : this.systemInfo.width,
+					height   : this.systemInfo.height,
 					canvasId : 'testCanvas',
 					fileType : 'jpg',
 					success(res) {
@@ -112,40 +126,44 @@
 				})
 			},
 			onInit() {
+				let {marginTop, marginLeft, marginBottom} = this;
+
 				let picture = wx.getStorageSync('question_picture'),
 				qrcode      = wx.getStorageSync('qrcode'),
 				avatarUrl   = wx.getStorageSync('avatarUrl'),
-				marginTop   = 30,
-				marginLeft  = 70,
 				_width      = this.systemInfo.width - (marginLeft * 2);
 
+
 				var ctx = wx.createCanvasContext('testCanvas');
-				ctx.drawImage('/static/img/envelope.png', 0, 0, this.systemInfo.width - 20, 540);
+				ctx.drawImage('/static/img/envelope.jpg', 0, 0, this.systemInfo.width, this.systemInfo.height - marginBottom);
 				if(picture){
-					ctx.drawImage(picture, (this.systemInfo.width - 200) / 2, marginTop, 200, 80)
+					ctx.drawImage(picture, (this.systemInfo.width - 200) / 2, marginTop, 200, 120)
 				}
+
+				marginTop += 150;
 
 				ctx.save();
 				// 头像绘制
 				if(avatarUrl) {
-					ctx.arc(marginLeft, 130, 15, 0, Math.PI * 2, false);
+					ctx.arc(marginLeft, marginTop, 15, 0, Math.PI * 2, false);
 					ctx.clip();//画了圆 再剪切  原始画布中剪切任意形状和尺寸。一旦剪切了某个区域，则所有之后的绘图都会被限制在被剪切的区域内
+					ctx.drawImage(avatarUrl, (marginLeft - 15), marginTop - 15, 30, 30); // 推进去图片
 					
-					ctx.drawImage(avatarUrl, (marginLeft - 15), 110, 30, 30); // 推进去图片
 				}
 				ctx.restore();
-				marginTop += 105;
+				
+				marginTop += 5
 				ctx.setFontSize(14)
 				ctx.setTextAlign('left')
 				ctx.setFillStyle('#999')
-				ctx.fillText(this.user.nickName, 100, marginTop)
+				ctx.fillText(this.user.nickName, (marginLeft + 20), marginTop)
 
 
-				marginTop += 30;
+				marginTop += 40;
 				ctx.setFontSize(16)	
 				ctx.setFillStyle('#000')
 				ctx.setTextAlign('left')
-				ctx.fillText(`测试结果：${this.answer.text}`, 50, marginTop)
+				ctx.fillText(`测试结果：${this.answer.text}`, (marginLeft - 20), marginTop)
 
 
 				ctx.setFontSize(14)
@@ -169,19 +187,19 @@
 				row.forEach((val, index) => {
 					if (index < 5) {
 						textTop += 25;
-						ctx.fillText(val, 50, textTop);
+						ctx.fillText(val, (marginLeft - 20), textTop);
 					}
 				});
 
-				marginTop += 135;
+				marginTop = this.systemInfo.height - (130 + marginBottom);
 				if(qrcode) {
-					ctx.drawImage(qrcode, 50, marginTop, 80, 80);
+					ctx.drawImage(qrcode, (marginLeft - 20), marginTop, 80, 80);
 				}
 				ctx.setFillStyle('#6b6b6b')
 				marginTop += 40;
-				ctx.fillText('长按识别二维码', 140, marginTop );
+				ctx.fillText('长按识别二维码', (marginLeft + 80), marginTop );
 				marginTop += 20;
-				ctx.fillText('一张图测试你的好色程度', 140, marginTop);
+				ctx.fillText('一张图测试你的好色程度', (marginLeft + 80), marginTop);
 				
 				ctx.draw();
 				wx.hideLoading();
@@ -208,7 +226,7 @@
 	}
 	button::after {
 		border: none;
-	} 
+	}
 	.result .content{
 		display: flex;
 		justify-content: center;
@@ -275,6 +293,7 @@
 	}
 	.result-btn{
 		margin-top: 30rpx;
+		margin-bottom: 30rpx;
 		text-align: center;
 	}
 	.result-btn .btn-img{

@@ -11,8 +11,9 @@ app.$mount()
 
 Vue.store                = store;
 Vue.setting              = {
-    api    : 'https://waguo.vip/',
-    appid  : 'wx48cbc8c2696d0f4a',
+    api         : 'https://waguo.vip/',
+    content_api : 'https://shop.waguo.vip/',
+    appid       : 'wx48cbc8c2696d0f4a',
     secret : '1b51ba7d70f708759890e7efee8e8976'
 }
 

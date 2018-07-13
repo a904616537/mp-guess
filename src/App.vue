@@ -30,7 +30,8 @@ export default {
     created() {
         wx.getSystemInfo({
             success(res) {
-                store.dispatch('onSetSystem', {width : res.windowWidth, height : res.windowHeight})
+                console.log('设备信息', res)
+                store.dispatch('onSetSystem', {width : res.windowWidth, height : res.windowHeight, system : res.system})
             }
         })
     },

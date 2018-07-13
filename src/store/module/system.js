@@ -10,7 +10,8 @@ import * as types  from '../mutation-types'
 
 const state = {
 	width  : 0,
-	height : 0
+	height : 0,
+	system : 'IOS'
 }
 
 const actions = {
@@ -25,6 +26,7 @@ const mutations = {
 	[types.SYSTEM_SET] (state, data) {
 		state.width  = data.width;
 		state.height = data.height;
+		state.system = data.system;
 	}
 }
 

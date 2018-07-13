@@ -1,24 +1,25 @@
 <template>
 	<div class="index">
-		<div class="banner" :style="'background-image: url('+banner.img+')'">
-			<div class="banner-title" style="background-image: url('/static/img/title-bg.png')">{{banner.content}}</div>
-		</div>
-		<div class="content">
-			<div class="inner">
+		<swiper
+		style ="height : 360rpx;"
+		:autoplay="true"
+		:interval="5000"
+		:duration="1000"
+		:indicatorDots="true"
+		indicatorColor="rgba(255,255,255,.4)"
+		indicator-active-color="#fff"
+		>
+			<block v-for="(item, index) in banner" :key="index">
 
-				<!--START 题库 -->
-				<div v-for="(item, index) in questions" :key="index" class="item clearfloat" @click='() => click(item)'>
-					<div class="left">
-						<div class="item-img" :style="'background-image: url('+item.question_picture+')'"></div>
-					</div>
-					<div class="right">
-						<div class="title">{{item.question_title}}</div>
-						<div class="number">{{item.all}}人</div>
-					</div>
-				</div>
-				<!--END 题库 -->
-
-			</div>
+				<swiper-item class="swiper-item">
+					<button open-type="contact" send-message-title="5" class="banner" @contact="onContact" :style="'background-image: url('+item.img+')'">
+						<div class="banner-title" style="background-image: url('/static/img/title-bg.png')">{{item.content}}</div>
+					</button>
+			    </swiper-item>
+			</block>
+		</swiper>
+		<div style="padding : 40rpx;">
+			<v-questions :onBack="click"/>
 		</div>
 
 		<v-login :show="show" :close="onClose"></v-login>
@@ -26,8 +27,10 @@
 </template>
 
 <script>
-	import Vue   from 'vue';
-	import Login from '@/components/login';
+	import Vue           from 'vue';
+	import Login         from '@/components/login';
+	import Questions     from '@/components/questions';
+	import constact_help from '@/utils/mp-contact';
 
 	const {dispatch, commit, getters, state} = Vue.store;
 
@@ -41,18 +44,45 @@
 			}
 		},
 		components: {
-			'v-login' : Login
+			'v-login'     : Login,
+			'v-questions' : Questions
 		},
 		computed: {
-	      	banner () {
-	      		const ban = state.Banner.banner.find(v => v.type === '1');
-	        	return ban || {img : '/static/img/banner.png'}
+			user () {
+	        	return state.User.user
 	        },
-	        questions() {
-	        	return state.Question.questions || [];
+	        isLogin() {
+	        	return state.User.token?true:false;
+	        },
+	      	banner () {
+	      		const ban = state.Banner.banner.filter(val => val.type.includes('5') && val.share_key.includes('top'))
+	        	return ban && ban.length > 0? ban : [{img : '/static/img/banner.png'}]
 	        },
 	    },
 		methods: {
+			onContact(handler) {
+				console.log('客服消息回调', handler);
+			},
+			onContent() {
+				if(!this.isLogin) {
+					this.show = true;
+					return;
+				}
+				const msg = {
+					touser  : this.user.openId,
+					msgtype : "text",
+					content : "欢迎来到抓娃娃王国"
+				};
+				console.log('msg', msg);
+
+				constact_help.sendCustomMsg(msg)
+				.then(result => {
+					console.log('发送客服消息返回结果', result);
+				})
+				.catch(err => {
+					console.log('发送客服消息失败');
+				})
+			},
 			click(question) {
 				if(getters.isLogin) {
 					dispatch('setQuestion', question)
@@ -119,56 +149,5 @@
 		text-align: center;
 		font-size: 40rpx;
 		line-height: 68rpx;
-	}
-	.index .content{
-		padding: 40rpx;
-	}
-	.index .inner{
-		background-color: #fff;
-		border-radius: 10rpx;
-		padding: 20rpx 10rpx 20rpx 20rpx;
-		overflow: hidden;
-		font-size: 26rpx;
-	}
-	.index .item{
-		width: 100%;
-		position: relative;
-		margin-bottom: 40rpx;
-	}
-	.index .left{
-		float: left;
-	}
-	.index .right{
-		float: right;
-		height: 140rpx;
-		width: 420rpx;
-	}
-	.index .right .title{
-		background-color: #82a5ff;
-		border-radius: 5rpx;
-		color: #fff;
-		padding: 0 10rpx;
-		line-height: 50rpx;
-	}
-	.index .right .number{
-		position: absolute;
-		bottom: 0;
-		color: #fe6060;
-		font-size: 30rpx;
-	}
-	.index .clearfloat{
-		content: '';
-		clear: both;
-		display: table;
-		height: 0;
-		overflow: hidden;
-	}
-	.index .item-img{
-		width: 136rpx;
-		height: 136rpx;
-		background-size: cover;
-		overflow: hidden;
-		border-radius: 10rpx;
-		border: 4rpx solid #82a5ff;
 	}
 </style>

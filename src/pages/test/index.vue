@@ -49,7 +49,7 @@
 		methods: {
 			start() {
 				const url = '../start/main'
-				wx.redirectTo({url})
+				wx.navigateTo({url})
 			},
 			share() {
 				console.log('share')
