@@ -1,153 +1,85 @@
 <template>
 	<div class="index">
-		<swiper
-		style ="height : 360rpx;"
-		:autoplay="true"
-		:interval="5000"
-		:duration="1000"
-		:indicatorDots="true"
-		indicatorColor="rgba(255,255,255,.4)"
-		indicator-active-color="#fff"
-		>
-			<block v-for="(item, index) in banner" :key="index">
-
-				<swiper-item class="swiper-item">
-					<button open-type="contact" send-message-title="5" class="banner" @contact="onContact" :style="'background-image: url('+item.img+')'">
-						<div class="banner-title" style="background-image: url('/static/img/title-bg.png')">{{item.content}}</div>
-					</button>
-			    </swiper-item>
-			</block>
-		</swiper>
-		<div style="padding : 40rpx;">
-			<v-questions :onBack="click"/>
+		<div class="head">
+			<div class="user-infor">
+				<image mode="aspectFill" class="user-img" :src="avatar"/>
+				<div class="infor">
+					<p class="user-name">Jacky</p>
+					<p>上海福哇啦信息科技有限公司</p>
+				</div>
+			</div>
+			<p class="income">总收入<span class="sum">¥40789</span></p>
 		</div>
+		<div class="search">
+			<input type="text" class="input-style" placeholder="搜索订单" placeholder-style="color: #888888;"/>
+			<img :src="icon.search" class="search-icon" />	
+		</div>
+		<div class="content">
 
-		<v-login :show="show" :close="onClose"></v-login>
+			<v-card v-for="(val, index) in list" :key="index" :title="val.title" :num="val.num" :count="val.count" :onClick="() => topage(val.url)"/>
+
+			<div class="card" @click="inventory">
+				<div class="inner item">
+					<img :src="icon.choice" class="icon-style" />
+					备货
+				</div>
+			</div>
+			<div class="card" @click="bill">
+				<div class="inner item">
+					<img :src="icon.bill" class="icon-style" />
+					账单
+				</div>
+			</div>
+
+		</div>
+		<v-menu :index="0"></v-menu>
 	</div>
 </template>
 
 <script>
 	import Vue           from 'vue';
-	import Login         from '@/components/login';
-	import Questions     from '@/components/questions';
 	import constact_help from '@/utils/mp-contact';
+	import Menu          from '@/components/menu';
+	import Card          from '@/components/card';
 
 	const {dispatch, commit, getters, state} = Vue.store;
 
 	export default{
-		onShow() {
-			this.onSetQuestion();
-		},
+		name : 'index',
 		data() {
 			return {
-				show : false
+				avatar : '/static/imgs/headimg.jpg',
+				icon : {
+					search : '/static/icon/search.png',
+					choice : '/static/icon/choice-red.png',
+					bill : '/static/icon/bill.png',
+				},
+				list : [
+					{title : '今日总接单', num : 5, count : 50, url : '../order/main'},
+					{title : '所有未发货', num : 5, count : 50, url : '../order/main'},
+					{title : '进行中', num : 120, count : 100, url : '../order/main'},
+					{title : '已结束', num : 10, count : 10, url : '../order/main'},
+					{title : '周收入', num : 400, count : 100, url : '../week/main'},
+					{title : '总接单', num : 5, count : 50, url : '../all/main'}
+				]
 			}
 		},
 		components: {
-			'v-login'     : Login,
-			'v-questions' : Questions
+			'v-menu' : Menu,
+			'v-card' : Card
 		},
-		computed: {
-			user () {
-	        	return state.User.user
-	        },
-	        isLogin() {
-	        	return state.User.token?true:false;
-	        },
-	      	banner () {
-	      		const ban = state.Banner.banner.filter(val => val.type.includes('5') && val.share_key.includes('top'))
-	        	return ban && ban.length > 0? ban : [{img : '/static/img/banner.png'}]
-	        },
-	    },
 		methods: {
-			onContact(handler) {
-				console.log('客服消息回调', handler);
+			inventory() {
+				const url = '../inventory/main'
+				wx.navigateTo({url})
 			},
-			onContent() {
-				if(!this.isLogin) {
-					this.show = true;
-					return;
-				}
-				const msg = {
-					touser  : this.user.openId,
-					msgtype : "text",
-					content : "欢迎来到抓娃娃王国"
-				};
-				console.log('msg', msg);
-
-				constact_help.sendCustomMsg(msg)
-				.then(result => {
-					console.log('发送客服消息返回结果', result);
-				})
-				.catch(err => {
-					console.log('发送客服消息失败');
-				})
+			bill() {
+				const url = '../bill/main'
+				wx.navigateTo({url})
 			},
-			click(question) {
-				if(getters.isLogin) {
-					dispatch('setQuestion', question)
-					const url = '../test/main'
-					wx.navigateTo({url})
-				} else { this.show = true; }
-			},
-			onClose() {
-				this.show = false
-			},
-			onSetQuestion() {
-				
-				wx.request({
-					url     : `${Vue.setting.api}mobile/qa3`,
-					success : (result, req) => {
-						if(result.data.ret === 0) {
-							dispatch('onInitQuestion', result.data.data);
-						} else {
-							wx.showToast({
-								title    : '网络错误！',
-								icon     : 'none',
-								duration : 2000
-							})
-						}
-		            }
-		        })
-			},
-			onSetbanner() {
-				const data = {
-					type : 5
-				}
-				wx.request({
-					url     : `${Vue.setting.api}mobile/getPicture`,
-					data    : data,
-					success : (result, req) => {
-						console.log('result get banner', result)
-						dispatch('setBanner', result.data.picture)
-		            }
-		        })
+			topage(url) {
+				wx.navigateTo({url})
 			}
-		},
-		beforeMount() {
-			this.onSetbanner();
 		}
 	}
 </script>
-
-<style>
-	Page{
-		background-color: #e7e7e7;
-	}
-	.index .banner{
-		width: 100%;
-		height: 400rpx;
-		background-size: cover;
-		position: relative;
-	}
-	.index .banner-title{
-		position: absolute;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		color: #fff;
-		text-align: center;
-		font-size: 40rpx;
-		line-height: 68rpx;
-	}
-</style>

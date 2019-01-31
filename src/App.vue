@@ -17,15 +17,15 @@ export default {
         }
     },
     beforeMount() {
-        wx.showLoading({
-            title : '加载中'
-        })
-        login_help.onGetUserInfo()
-        .then(res => wx.hideLoading())
-        .catch(err => {
-            console.log(err)
-            wx.hideLoading()
-        })
+        // wx.showLoading({
+        //     title : '加载中'
+        // })
+        // login_help.onGetUserInfo()
+        // .then(res => wx.hideLoading())
+        // .catch(err => {
+        //     console.log(err)
+        //     wx.hideLoading()
+        // })
     },
     created() {
         wx.getSystemInfo({
@@ -59,4 +59,11 @@ export default {
     -webkit-transition : width 2s;
     -o-transition      : width 2s;
 }
+
+.tab-h{
+    width: 100%;
+    height: 50rpx;
+}
+.tab-item{
+    }
 </style>

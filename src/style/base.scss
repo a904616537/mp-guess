@@ -1,0 +1,767 @@
+$puplic-space: 10px;
+$normal-font: 12px;
+$title-font: 18px;
+$dominant-tone: #E84140;
+$sub-tone: #888888;
+
+// puplic.style
+*{
+	color: #353535;
+}
+.index {
+	padding-bottom: 50rpx;
+}
+.banner{
+	width: 100%;
+	height: 140px;
+	font-size: $title-font;
+	color: #fff;
+	background: linear-gradient(to right, $dominant-tone, #770F8C); 
+	box-shadow: 0px 4px 4px rgba(0,0,0,.4);
+	text-align: center;
+	padding-top: 40px;
+	position: relative;
+	.num-style{
+		font-size: 26px;
+	}
+	.sub-title{
+		font-size: $normal-font;
+		line-height: 30px;
+	}
+}
+.bar{
+	background-color: #EAEAEA;
+	color: $sub-tone;
+	font-size: $normal-font;
+	line-height: 46px;
+	display: flex;
+	flex: 1;
+	justify-content: space-between;
+	padding: 0 $puplic-space;
+	.title{
+		font-size: 16px;
+		color: #353535;
+	}
+	.bar-icon{
+		width: 20px;
+		height: 20px;
+		vertical-align: middle;
+		margin-left: $puplic-space;
+	}
+}
+.puplic-item{
+	font-size: 14px;
+	color: $sub-tone;
+	box-shadow: 0 2px 4px rgba(0,0,0,.4);
+	margin: {
+		left: $puplic-space;
+		right: $puplic-space;
+		bottom: $puplic-space*3;
+	}
+	.title{
+		background-color: #EAEAEA;
+		font-size: $title-font;
+		line-height: 48px;
+		padding: 0 $puplic-space;
+		display: flex;
+		justify-content: space-between;
+	}
+	.inner{
+		padding: 0 $puplic-space;
+		.item{
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			height: 40px;
+		}
+		.label{
+			flex: 1;
+			.label-icon{
+				width: 17px;
+				height: 17px;
+				margin-right: $puplic-space;
+				vertical-align: middle;
+			}
+		}
+		.infor{
+			flex: 2;
+			align-items: baseline;
+			.call-icon{
+				width: 22px;
+				height: 22px;
+				vertical-align: middle;
+				margin-left: $puplic-space;
+			}
+		}
+	}
+	.form{
+		text-align: left;
+		tr{
+			display: flex;
+			justify-content: space-between;
+			flex-wrap: wrap;
+		}
+		td{
+			line-height: 40px;
+			font-size: 14px;
+			span{
+				display: inline-block;
+				width: 70px;
+				margin-right: $puplic-space;
+			}
+		}
+		.product{
+			flex: 2;
+		}
+	}
+}
+.btn{
+	font-size: 14px;
+	color: $dominant-tone;
+	border: 1px solid $dominant-tone;
+	border-radius: 8px;
+	line-height: 36px;
+	width: 68px;
+	display: inline-block;
+	text-align: center;
+	margin: 0 20px;
+}
+.solid-btn{
+	background-color: $dominant-tone;
+	color: #fff;
+}
+.full-btn{
+	font-size: $title-font;
+	line-height: 46px;
+	color: #fff;
+	background-color: $dominant-tone;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	width: 355px;
+	margin: 0 $puplic-space $puplic-space*3;
+}
+
+
+// index.vue
+.head{
+	height: 180px;
+	color: #fff;
+	background: linear-gradient(to right, $dominant-tone, #770F8C); 
+	box-shadow: 0px 4px 4px rgba(0,0,0,.4);
+	.user-infor{
+		display: flex;
+		align-items: center;
+		padding: $puplic-space*2 $puplic-space 0;
+		font-size: $normal-font;
+	}
+	.infor{
+		.user-name{
+			font-size: $normal-font*2;
+			font-weight: bold;
+		}
+	}
+	.user-img{
+		width: 84px;
+		height: 84px;
+		border-radius: 50px;
+		margin-right: $puplic-space;
+		background-repeat: no-repeat;
+		background-size: cover;
+		background-position: center;
+	}
+	.income{
+		font-size: $title-font;
+		float: right;
+		margin-right: $puplic-space;
+		.sum{
+			font-size: 26px;
+		}
+	}
+}
+.search{
+	font-size: 14px;
+	margin: 0 $puplic-space;
+	position: relative;
+	top: -23px;
+	.input-style{
+		background: #fff;
+		height: 46px;
+		border-radius: 20px;
+		box-shadow: 0px 2px 4px rgba(0,0,0,.4);
+		padding: 0 20px 0 46px;
+		line-height: 46px;
+	}
+	.search-icon{
+		width: 16px;
+		height: 16px;
+		position: absolute;
+		top: 14px;
+		left: 20px;
+	}
+}
+.content{
+	display: flex;
+	flex: 1;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	margin-bottom: 60px;
+	.card{
+		width: 44.537%;
+		margin-bottom: $puplic-space*2;
+	}
+	.item{
+		line-height: 70px;
+	}
+	.inner{
+		background: #fff;
+		height: 68px;
+		box-shadow: 0px 2px 4px rgba(0,0,0,.4);
+		border-radius: 8px;
+		padding: $puplic-space;
+		.title{
+			font-size: $title-font;
+		}
+		.count{
+			color: $dominant-tone;
+			font-size: 20px;
+			line-height: 40px;
+		}
+		.icon-style{
+			width: 22px;
+			height: 20px;
+			margin-right: $puplic-space/2;
+		}
+	}
+}
+.progress{
+	width: 146px;
+	display: inline-block;
+	zoom: 1;
+	vertical-align: top;
+	.progress-bar{
+		position: relative;
+		background-color: #E5E5E5;
+	}
+	.progress-container{
+		height: 2px;
+	    position: relative;
+	    left: -1px;
+	    margin-right: -2px;
+	    font: 1px/0 arial;
+	}
+	.progress-value{
+		border-radius: 15px;
+	    background: $dominant-tone;
+	    height: 100%;
+	}
+}
+
+// order.vue
+.order{
+	padding-bottom: $puplic-space*4;
+	.tab{
+		font-size: $title-font;
+		color: $dominant-tone;
+		display: flex;
+		flex: 1;
+		justify-content: space-between;
+		border: 1px solid $dominant-tone;
+		border-radius: 8px;
+		margin: 30px 10px 0;
+		text-align: center;
+		overflow: hidden;
+		.item{
+			width: 50%;
+			line-height: 47px;
+		}
+		.tab-icon{
+			width: 24px;
+			height: $title-font;
+			margin-right: $puplic-space;
+		}
+		.checked{
+			color: #fff;
+			background-color: $dominant-tone;
+		}
+	}
+	.orderCard{
+		margin: 30px 10px 0;
+	}
+}
+// orderCard.vue
+.orderCard{
+	box-shadow: 0px 2px 4px rgba(0,0,0,.4);
+	width: 100%;
+	height: 130px;
+	border-radius: 8px;
+	overflow: hidden;
+	display: flex;
+	.headImg{
+		background-position: center;
+		background-size: cover;
+		width: 130px;
+		height: 130px;
+		flex-shrink: 0;
+	}
+	.orderInfor{
+		font-size: 14px;
+		padding: $puplic-space;
+		p{
+			margin-bottom: $puplic-space;
+		}
+		.phone-icon{
+			width: 17px;
+			height: 17px;
+			vertical-align: middle;
+			margin-left: $puplic-space/2;
+		}
+	}
+}
+
+// week.vue
+.week-income{
+	padding-bottom: $puplic-space*4;
+	.chart-style{
+		position: relative;
+		top: -70px;
+		left: 0;
+		right: 0;
+	}
+	.list-style{
+		margin: {
+			top: -40px;
+			bottom: 40px;
+		}
+	}
+}
+// chart.vue
+.chart{
+	height: 254px;
+	margin: 0 $puplic-space;
+	background-color: #fff;
+	border-radius: 8px;
+	box-shadow: 0 2px 4px rgba(0,0,0,.4);
+	overflow: hidden;
+	font-size: 14px;
+	.title{
+		line-height: 50px;
+		font-size: 14px;
+		padding: 0 $puplic-space;
+		color: $sub-tone;
+		background-color: #EAEAEA;
+		display: flex;
+		flex: 1;
+		justify-content: space-between;
+		.input-style{
+			border: 1px solid $dominant-tone;
+			border-radius: 8px;
+			color: #353535;
+			width: 50px;
+			line-height: 26px;
+			display: inline-block;
+			position: relative;
+			// top: $puplic-space;
+			text-align: center;
+			margin-right: 5px;
+		}
+		.search-icon{
+			width: 17px;
+			height: 17px;
+			vertical-align: middle;
+			margin-left: 5px;
+		}
+		.tag{
+			font-size: 11px;
+			color: #fff;
+			background-color: $dominant-tone;
+			width: 26px;
+			height: 26px;
+			line-height: 26px;
+			margin-top: $puplic-space;
+			border-radius: 15px;
+			text-align: center;
+		}
+	}
+}
+// components/week/index
+.list-box{
+	margin: 0 $puplic-space;
+	border: 1px solid #EAEAEA;
+	color: $sub-tone;
+	.title{
+		background-color: #EAEAEA;
+		display: flex;
+		justify-content: space-between;
+		font-size: $title-font;
+		height: 28px;
+		padding: $puplic-space 0;
+		line-height: 28px;
+		color: #353535;
+		text-align: center;
+		> div{
+			flex: 1;
+			border-right: 1px solid #353535;
+		}
+		.last{
+			border: none;
+		}
+	}
+	.form{
+		text-align: center;
+		tr{
+			display: flex;
+			justify-content: space-between;
+			flex-wrap: wrap;
+			border-bottom: 1px solid #EAEAEA;
+		}
+		td{
+			flex: 1;
+			line-height: 40px;
+			font-size: 14px;
+			span{
+				display: inline-block;
+				text-align: left;
+				width: 70px;
+				margin-right: $puplic-space;
+			}
+		}
+		.product{
+			text-align: left;
+			margin-left: $puplic-space;
+		}
+	}
+}
+
+// inventory
+.inventory{
+	padding-bottom: $puplic-space*4;
+	.list-box{
+		margin-top: $puplic-space*3;
+	}
+}
+
+// details
+.details{
+	padding-bottom: $puplic-space*4;
+	.map{
+		width: 100%;
+		height: 190px;
+		background-color: #f4f4f4;
+		margin-bottom: $puplic-space*3;
+	}
+	.total{
+		color: $dominant-tone;
+		.text-style{
+			color: $sub-tone;
+			position: relative;
+			left: $puplic-space/2;
+		}
+	}
+	.erweima{
+		display: flex;
+		justify-content: center;
+		margin-bottom: $puplic-space*2;
+		.icon-style{
+			width: 44px;
+			height: 44px;
+			background-color: $dominant-tone;
+			padding: 8px;
+			border-radius: 50px;
+			box-shadow: 0 2px 4px rgba(0,0,0,.4);
+		}
+	}
+}
+
+// profile.vue
+.profile{
+	.user-img{
+		width: 84px;
+		height: 84px;
+		background-size: cover;
+		background-position: center;
+		border-radius: 50px;
+		margin: 0 auto;
+		margin-bottom: $puplic-space;
+	}
+	.sub-title{
+		font-size: 16px;
+	}
+	.inner{
+		padding: $puplic-space*2 $puplic-space;
+		.item{
+			box-shadow: 0 2px 4px rgba(0,0,0,.4);
+			border-radius: 8px;
+			width: 100%;
+			font-size: $title-font;
+			line-height: 45px;
+			margin-bottom: $puplic-space*2;
+			.icon-style{
+				width: 20px;
+				height: 20px;
+				margin-left: $puplic-space;
+				margin-right: 5px;
+				vertical-align: middle;
+			}
+			span{
+				color: $dominant-tone;
+				float: right;
+				margin-right: $puplic-space;
+			}
+		}
+	}
+}
+
+// company.vue
+.company{
+	padding: $puplic-space;
+	.item{
+		display: flex;
+		border-bottom: 1px solid #EAEAEA;
+		line-height: 45px;
+		.label{
+			font-size: $title-font;
+			flex: 1;
+		}
+		.infor{
+			flex: 2;
+			font-size: 16px;
+			color: $sub-tone;
+			align-items: baseline;
+		}
+		.img-style{
+			width: 336px;
+			height: 200px;
+			background-color: #f4f4f4;
+			background-position: center;
+			background-size: cover;
+			display: block
+		}
+	}
+	.item:last-of-type{
+		display: block;
+		border: none;
+		.img-style{
+			margin: 0 auto;
+		}
+	}
+}
+
+// award.vue
+.award{
+	padding: $puplic-space*2 $puplic-space;
+	.details{
+		padding: 0;
+	}
+}
+.award-item{
+	font-size: 17px;
+	.box{
+		margin-bottom: $puplic-space*3;
+		box-shadow: 0 2px 4px rgba(0,0,0,.4);
+		border-radius: 8px;
+		overflow: hidden;
+	}
+	.inner{
+		padding: $puplic-space;
+	}
+	.item{
+		display: flex;
+		justify-content: space-between;
+		line-height: 30px;
+		.time{
+			font-size: 14px;
+			color: $sub-tone;
+		}
+	}
+	.bottom{
+		background: linear-gradient(to right, $dominant-tone, #770F8C); 
+		color: #fff;
+		text-align: center;
+		line-height: 40px;
+	}
+}
+
+// record.vue
+.record{
+ 	padding: $puplic-space*2 0;
+ 	.title{
+ 		color: #353535;
+ 		font-size: 18px;
+ 	}
+ 	.inner{
+ 		font-size: 14px;
+ 		color: $sub-tone;
+ 		padding-bottom: $puplic-space;
+ 	}
+ 	.puplic-item{
+ 		margin-bottom: $puplic-space*3;
+ 	}
+ 	span{
+ 		margin-left: $puplic-space*2;
+ 	}
+}
+
+// service.vue
+.service{
+	text-align: center;
+	padding: $puplic-space*6 0;
+	font-size: $title-font;
+	.logo{
+		width: 137px;
+		height: 50px;
+		position: relative;
+		left: -50px;
+	}
+	.qr-img{
+		width: 260px;
+		height: 260px;
+		margin: $puplic-space*3 0 $puplic-space;
+	}
+}
+
+// address.vue
+.address{
+	.item{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin: 0 $puplic-space;
+		height: 45px;
+		.label{
+			flex: 1;
+			font-size: $title-font;
+		}
+		.text-style{
+			flex: 2;
+			color: $sub-tone;
+			font-size: 16px;
+			align-items: baseline;
+		}
+	}
+	.item:not(:last-child){
+		border-bottom: 1px solid #EAEAEA;
+	}
+	.address-infor{
+		padding-top: 22px;
+	}
+	.handle{
+		margin-top: $puplic-space*4;
+		float: right;
+	}
+}
+// components/alert.vue
+.alert{
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	background-color: rgba(0,0,0,.5);
+	height: 100%;
+	.inner{
+		font-size: $title-font;
+		text-align: center;
+		border-radius: 8px;
+		background-color: #fff;
+		width: 280px;
+		margin: 40% auto 0;
+		.text-style{
+			line-height: 50px;
+			padding: $puplic-space;
+		}
+		.bottom{
+			color: #02BB00;
+			line-height: 46px;
+			border-top: 1px solid #E5E5E5;
+		}
+	}
+}
+
+// components/bill.vue
+.bill{
+	padding-bottom: $puplic-space*4;
+}
+.bill-item{
+	margin: {
+		left: $puplic-space;
+		right: $puplic-space;
+		bottom: $puplic-space*4;
+	}
+	.item{
+		margin-bottom: $puplic-space*3;
+		font-size: 18px;
+		color: $sub-tone;
+	}
+	.title{
+		background-color: #EAEAEA;
+		padding: 0 $puplic-space;
+		line-height: 45px;
+	}
+	.text{
+		border-bottom: 1px solid #EAEAEA;
+		display: flex;
+		justify-content: space-between;
+		line-height: 50px;
+		padding: 0 $puplic-space;
+		.text-style{
+			text-decoration: underline;
+		}
+		.icon-style{
+			width: 20px;
+			height: 20px;
+			margin-right: $puplic-space;
+			vertical-align: middle;
+		}
+	}
+}
+
+// all-order.vue
+.all-order{
+	padding-bottom: $puplic-space*4;
+	.item{
+		font-size: 14px;
+		margin: {
+			left: $puplic-space;
+			right: $puplic-space;
+			bottom: $puplic-space;
+		}
+		.icon-style{
+			width: 17px;
+			height: 10px;
+		}
+	}
+	.title{
+		background-color: #EAEAEA;
+		padding: $puplic-space;
+		line-height: 22px;
+		position: relative;
+	}
+	.btn-style{
+		width: 112px;
+		line-height: 36px;
+		text-align: center;
+		color: $dominant-tone;
+		border: 1px solid $dominant-tone;
+		border-radius: 8px;
+	}
+	.drop-btn{
+		@extend .btn-style;
+		position: absolute;
+		top: 14px;
+		right: $puplic-space;
+	}
+	.inner{
+		padding: $puplic-space*2 0;
+		.orderCard{
+			margin-bottom: $puplic-space*2;
+		}
+		.close-btn{
+			@extend .btn-style;
+			margin-left: 68%;
+			.icon-style{
+				transform:rotate(180);
+			}
+		}
+	}
+}
