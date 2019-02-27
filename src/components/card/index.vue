@@ -6,7 +6,7 @@
 		<div class="progress">
 			<div class="progress-bar">
 				<div class="progress-container">
-					<div class="progress-value" :style="'width: '+count+'%;'"></div>
+					<div class="progress-value" :style="'width: '+percentage+'%;'"></div>
 				</div>
 			</div>
 		</div>	
@@ -20,7 +20,6 @@
 		name : 'card',
 		data() {
 			return {
-				
 			}
 		},
 		props : {
@@ -41,10 +40,17 @@
 				default : () => {}
 			}
 		},
+		computed: {
+			percentage() {
+				const val = this.num/this.count;
+				return val > 1?100: val * 100
+			}
+		},
 		components: {
 		},
 		methods: {
-
+		},
+		beforeMount() {
 		}
 	}
 </script>

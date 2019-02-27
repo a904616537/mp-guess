@@ -31,18 +31,20 @@ export default {
 	onWXApp(user) {
 		return new Promise((resolve, reject) => {
 			const data = {
-				nickname : user.nickName,
-				openid   : user.openId,
-				unionid  : user.unionId,
-				avatar   : user.avatarUrl,
-				gender   : user.gender
+				// nickname : user.nickName,
+				// openid   : user.openId,
+				// unionid  : user.unionId,
+				// avatar   : user.avatarUrl,
+				// gender   : user.gender,
+				phone : user.phone
 			}
 	    	wx.request({
-				url     : `${Vue.setting.api}mobile/wx_app`,
+	    		method : 'post',
+				url     : `${Vue.setting.api}/login`,
 				data    : data,
 				success : (result, req) => {
-	            	store.commit('user/detail', {user : result.data.user, token : result.data.login.token});
-	            	resolve();
+	            	store.commit('user/detail', result.data);
+	            	resolve(result.data);
 	            }
 	        })
 	    });
@@ -50,12 +52,13 @@ export default {
 
 	onGetUserInfo() {
 	    return new Promise((resolve, reject) => {
+
 	        wx.getSetting({
 	            success : (res) => {
 	                if (res.authSetting['scope.userInfo']) {
                         this.onGetLogin()
                         .then(userdata => {
-                        	console.log('登陆服务器响应成功', userdata)
+                        	// console.log('登陆服务器响应成功', userdata)
                         	// 登陆服务器响应成功
                         	const {session_key, openid} = userdata.data;
                         	
@@ -72,15 +75,11 @@ export default {
 						            if(data) {
 						            	this.onSetSessionKey(session_key);
 		                            	this.onLogin(data);
-		                            	this.onWXApp(data)
-		                            	.then(() => {
-		                            		console.log('share', this.share)
-		                            		if(this.share) {
-			                        			this.onRequstShare(this.share.openGId);
-			                        		}
-		                            		// 登陆成功后获取用户详细数据
-		                            		resolve(data)
-		                            	})
+		                            	this.requestMpUser(data, (user) => {
+		                            		console.log('user --->', user);
+		                            		resolve(user);
+		                            	});
+
 						            } else reject(error.get(503))
 	                			},
                 				fail : (err) => reject(error.get(502))
@@ -108,18 +107,21 @@ export default {
 			const {encryptedData, iv} = e.mp.detail;
 	        this.onGetUserInfo()
 	        .then(userdata => {
-	        	setTimeout(() => {
-	        		callback(false)
-					wx.hideLoading();
-				}, 1000);
+	        	wx.hideLoading();
+	        	console.log('userdata ===>', userdata)
+	        	callback(userdata, false);
+
+	        	// setTimeout(() => {
+	        	// 	callback(user ,false)
+	        	// }, 1000);
 	        })
 	        .catch(() => {
-				callback(error.get(503))
+				callback(null, error.get(503))
 	        })
 		} else {
 			//用户按了拒绝按钮
 			console.log('用户按了拒绝按钮')
-			callback(error.get(501))
+			callback(null, error.get(501))
 		}
 	},
 	onGetLogin() {
@@ -128,15 +130,18 @@ export default {
 	            success : (res) => {
 	                if (res.code) {
 	                	const data = {
-							appid  : Vue.setting.appid,
-							secret : Vue.setting.secret,
-							code   : res.code
+							appid      : Vue.setting.appid,
+							secret     : Vue.setting.secret,
+							js_code    : res.code,
+							grant_type : 'authorization_code'
 	                	};
-	                	console.log('data', data)
 	                    wx.request({
-							url     : `${Vue.setting.api}mobile/wx_code`,
+							url     : `${Vue.setting.api}/sessionkey`,
 							data    : data,
-							success : (result) => resolve(result),
+							method : 'post',
+							success : (result) => {
+								resolve(result)
+							},
 							fail    : (err) => {
 	                        	console.log('err', err)
 	                        	reject(error.get(503))
@@ -147,15 +152,62 @@ export default {
 	        });
 	    });
 	},
+	onGetPhone(e, callback) {
+
+		if(e.mp.detail.errMsg == "getPhoneNumber:ok"){
+
+			wx.showLoading({
+				title : '加载中'
+			})
+
+			//用户按了允许授权按钮
+			console.log('用户按了允许授权按钮')
+			const {encryptedData, iv} = e.mp.detail;
+
+			this.onGetLogin()
+			.then(userdata => {
+				const {session_key, openid} = userdata.data;
+				const pc = new WxCrypt(Vue.setting.appid, session_key);
+				const data = pc.decryptData(encryptedData , iv)
+				
+            	this.onWXApp({phone:data.phoneNumber})
+            	.then((detail) => {
+            		// 登陆成功后获取用户详细数据
+            		wx.hideLoading();
+					callback(detail, true)
+            	})
+				
+			})
+			.catch((err) => {
+            	console.log('err', err)
+            	callback(error.get(503), false)
+            	wx.hideLoading();
+            });
+
+		} else {
+			//用户按了拒绝按钮
+			console.log('用户按了拒绝按钮')
+			callback(error.get(501), false)
+		}
+	},
+	requestMpUser(user, callback) {
+		wx.request({
+			url     : `${Vue.setting.api}/mp-user`,
+			method : 'post',
+			data    : user,
+			success : (result, req) => {
+				callback(result.data);
+            }
+        })
+	},
 	onRequstShare(gid) {
 		const data = {
 			team_union : gid,
 			uid        : store.state.User.share_uid,
 			token      : store.state.User.token,
 		}
-		console.log('data', data);
 		wx.request({
-			url     : `${Vue.setting.api}mobile/share_team_get`,
+			url     : `${Vue.setting.api}/share_team_get`,
 			data    : data,
 			success : (result, req) => {
 				console.log('result share_team_get', result)

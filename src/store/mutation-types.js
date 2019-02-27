@@ -16,10 +16,17 @@ export const USER_PLAY     = 'user/play'
 export const SETSHARE      = 'user/share'
 export const USER_UID      = 'user/uid'
 
-export const QUESTION_INIT     = 'question/init'
-export const QUESTION_SETCOUNT = 'question/set/count'
-export const QUESTION_PLAY     = 'question/play'
-export const QUESTION_SET      = 'question/set'
+const order = 'order'
+export const SET_TODAY    = `${order}/set/today`;
+export const SET_UNFILLED = `${order}/set/unfilled`;
+export const SET_STATUS_1 = `${order}/set/status/1`;
+export const SET_STATUS_3 = `${order}/set/status/3`;
+export const SET_WEEK     = `${order}/set/week`;
+export const SET_CONSUME  = `${order}/set/consume`;
+export const SET_DATE     = `${order}/set/date`;
+
+
+
 
 
 export const SYSTEM_SET = 'system/set'

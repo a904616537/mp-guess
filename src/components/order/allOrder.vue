@@ -1,43 +1,27 @@
 <template>
-	<div class="allOrder">
-		<div class="item">
-			<div class="title">
-				<p>2018.10.23</p>
-				<p>当日接单量：2</p>
-				<div class="drop-btn" @click="more">查看详情<img src="/static/icon/drop.png" class="icon-style" /></div>
-			</div>
-			<div class="inner" v-show="dropDown">
-				<v-order :onClick="details"></v-order>
-				<v-order :onClick="details"></v-order>
-				<v-order :onClick="details"></v-order>
-				<div class="close-btn" @click="close">收起详情<img src="/static/icon/up.png" class="icon-style" /></div>
-			</div>
+	<div class="item">
+		<div class="title">
+			<p>{{time}}</p>
+			<p>当日接单量：{{count}}</p>
+			<div v-show="!dropDown" class="drop-btn" @click="more">查看详情<img src="/static/icon/drop.png" class="icon-style" /></div>
 		</div>
-		<div class="item">
-			<div class="title">
-				<p>2018.10.23</p>
-				<p>当日接单量：2</p>
-				<div class="drop-btn">查看详情<img src="/static/icon/drop.png" class="icon-style" /></div>
-			</div>
-		</div>
-		<div class="item">
-			<div class="title">
-				<p>2018.10.23</p>
-				<p>当日接单量：2</p>
-				<div class="drop-btn">查看详情<img src="/static/icon/drop.png" class="icon-style" /></div>
-			</div>
-		</div>
-		<div class="item">
-			<div class="title">
-				<p>2018.10.23</p>
-				<p>当日接单量：2</p>
-				<div class="drop-btn">查看详情<img src="/static/icon/drop.png" class="icon-style" /></div>
-			</div>
+		<div class="inner" v-show="dropDown">
+			<v-order v-for="(item, index) in data.order" :key="index"
+			:src="item.headImgUrl"
+			:name="item.contactPerson"
+			:finalAddress="item.finalAddress"
+			:status="item.status"
+			:phone="item.contactPhone"
+			:onClick="() => toPage(item._id, item.finalAddress)"
+			>
+			</v-order>
+			<div class="close-btn" @click="close">收起详情<img src="/static/icon/up.png" class="icon-style" /></div>
 		</div>
 	</div>
 </template>
 
 <script>
+	import Vue from 'vue';
 	import Order from '@/components/order/orderCard'
 
 	export default{
@@ -51,13 +35,18 @@
 			'v-order' : Order
  		},
  		props: {
- 			more: {
- 				type : Function,
- 				default: () => console.log('查看详情')
+ 			data : {
+				type    : Object,
+				default : ()=>({order : []})
+ 			}
+ 		},
+ 		computed: {
+ 			time() {
+ 				const {year, month, day} = this.data._id;
+ 				return `${year}.${month}.${day}`;
  			},
- 			close: {
- 				type : Function,
- 				default: () => console.log('收起详情')
+ 			count() {
+ 				return this.data.order.length
  			}
  		},
  		methods: {
@@ -70,7 +59,21 @@
  			details() {
  				const url = '../details/main'
 				wx.navigateTo({url})
- 			}
+ 			},
+ 			toPage(_id, address) {
+				const location = `${address.city}${address.district}${address.address}`
+				Vue.setting.mapsdk.geocoder({
+					address : location,
+					success(res) {
+						const {lat, lng} = res.result.location;
+						wx.navigateTo({url : `../details/main?_id=${_id}&latitude=${lat}&longitude=${lng}`})
+					},
+					fail(err) {
+						wx.navigateTo({url : `../details/main?_id=${_id}`})
+					}	
+				})
+				
+			},
  		}
 	}
 </script>

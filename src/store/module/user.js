@@ -9,7 +9,9 @@
 import * as types  from '../mutation-types'
 
 const state = {
-	user        : {},
+	user        : {
+		avatarUrl : '/static/imgs/headimg.jpg',
+	},
 	session_key : '',
 	detail      : {},
 	share       : null,
@@ -35,11 +37,9 @@ const mutations = {
 		state.session_key = data;
 	},
 	[types.USERDETAIL] (state, data) {
-		state.detail = data.user;
 		state.token  = data.token;
-	},
-	[types.USER_PLAY] (state, data) {
-		state.detail.room_card -= data;
+		state.detail = data.user;
+
 	},
 	[types.SETSHARE] (state, data) {
 		state.share = data;

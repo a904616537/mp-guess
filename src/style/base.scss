@@ -11,6 +11,12 @@ $sub-tone: #888888;
 .index {
 	padding-bottom: 50rpx;
 }
+.center {
+	display: flex;
+	align-items:center;
+	justify-content: center;
+	flex-direction:column;
+}
 .banner{
 	width: 100%;
 	height: 140px;
@@ -116,15 +122,25 @@ $sub-tone: #888888;
 	}
 }
 .btn{
-	font-size: 14px;
+	width: 136rpx;
+	border-radius: 15rpx;
+	line-height: 72rpx;
+	font-size: 28rpx;
 	color: $dominant-tone;
-	border: 1px solid $dominant-tone;
-	border-radius: 8px;
-	line-height: 36px;
-	width: 68px;
+	border: 2rpx solid $dominant-tone;
 	display: inline-block;
 	text-align: center;
-	margin: 0 20px;
+	margin: 0 40rpx;
+	
+}
+.link {
+	width: 136rpx;
+	text-align: center;
+	color: $dominant-tone;
+	margin: 0 40rpx;
+	border:none;
+	background-color: transparent;
+
 }
 .solid-btn{
 	background-color: $dominant-tone;
@@ -142,7 +158,14 @@ $sub-tone: #888888;
 	width: 355px;
 	margin: 0 $puplic-space $puplic-space*3;
 }
-
+.login-btn{
+	font-size: $title-font;
+	line-height: 40px;
+	color: $dominant-tone;
+	background-color: #fff;
+	width: 120px;
+	margin: 0 $puplic-space $puplic-space*3;
+}
 
 // index.vue
 .head{
@@ -201,6 +224,7 @@ $sub-tone: #888888;
 		left: 20px;
 	}
 }
+
 .content{
 	display: flex;
 	flex: 1;
@@ -260,7 +284,7 @@ $sub-tone: #888888;
 
 // order.vue
 .order{
-	padding-bottom: $puplic-space*4;
+	// padding-bottom: $puplic-space*4;
 	.tab{
 		font-size: $title-font;
 		color: $dominant-tone;
@@ -287,7 +311,10 @@ $sub-tone: #888888;
 		}
 	}
 	.orderCard{
-		margin: 30px 10px 0;
+		margin: 20px 0px 10px;
+	}
+	.orderscroll {
+		padding: 0 10px;
 	}
 }
 // orderCard.vue
@@ -484,6 +511,7 @@ $sub-tone: #888888;
 		border-radius: 50px;
 		margin: 0 auto;
 		margin-bottom: $puplic-space;
+		overflow:hidden;
 	}
 	.sub-title{
 		font-size: 16px;
@@ -764,4 +792,8 @@ $sub-tone: #888888;
 			}
 		}
 	}
+}
+
+.notbottom {
+	margin-bottom: 0;
 }

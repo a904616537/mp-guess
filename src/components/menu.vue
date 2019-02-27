@@ -17,6 +17,9 @@
 </template>
 
 <script>
+	import Vue from 'vue';
+	import store from '@/store';
+	const {dispatch, commit, getters, state} = store;
 	export default{
 		name : 'menu',
 		date() {
@@ -30,18 +33,91 @@
 				default : 0
 			}
 		},
+		computed: {
+	        token () {
+	        	return state.User.token
+	        },
+	    },
 		methods : {
 			home() {
 				const url = '../index/main'
-				wx.navigateTo({url})
+				wx.redirectTo({url})
 			},
-			service() {
-				const url = '../service/main'
-				wx.navigateTo({url})
+			getQueryString(url) {
+				let params=url.split("?")[1];
+				if(params.length == 0) return null;
+				params=params.split("&");
+				const data = new Map();
+				params.map(val => {
+					const arr = val.split('=');
+					data.set(arr[0], arr[1]);
+					return val;
+				});
+				console.log('params', data.get('code'));
+				return data;
+			},
+			service(e) {
+				const that = this;
+				wx.scanCode({
+					onlyFromCamera: true,
+					success(res) {
+						console.log('res.result' ,res.result)
+						if(res.errMsg == "scanCode:ok") {
+							const data = that.getQueryString(res.result);
+							if(data) {
+								console.log('code', data.get('code'));
+								that.requestSweep(data.get('code'), data.get('number'))
+								.then(() => {
+								})
+								.catch(() => {
+								})
+
+							} else {
+								wx.showToast({
+									title    : '未检测到商品!',
+									icon     : 'none',
+									duration : 2000
+								})
+							}
+						} else {
+							wx.showToast({
+								title    : '未检测到商品!',
+								icon     : 'none',
+								duration : 2000
+							})
+						}
+					}
+				})
+			},
+			requestSweep(code, number) {
+				return new Promise((resolve, reject) => {
+					const data = {sku : code, number : number};
+					console.log('data', data);
+					wx.request({
+						url     : `${Vue.setting.api}/sweep`,
+						method : 'post',
+						data : data,
+						header  : {token : this.token},
+						success : (result, req) => {
+							console.log('sweep result', result);
+							let msg = '商品已录入!';
+							if(result.data.status == false) msg = result.data.msg;
+							wx.showToast({
+								title    : msg,
+								icon     : 'success',
+								duration : 2000
+							})
+							resolve();
+						},
+						fail : (err) => {
+							reject()
+						}
+					})
+				});
 			},
 			profile() {
 				const url = '../profile/main'
-				wx.navigateTo({url})
+				wx.redirectTo({url})
 			}
 		}
 	}

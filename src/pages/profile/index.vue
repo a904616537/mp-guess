@@ -2,8 +2,8 @@
 	<div class="profile">
 		<div class="banner">
 			<!-- <div class="user-img" style="background-image: url('/static/imgs/user.jpeg')"></dode="aspectFill" :src="headUrl" -->
-				<image class="user-img" mode="aspectFill" :src="headUrl" />
-			<p class="sub-title">188 0123 5678</p>
+				<image class="user-img" mode="aspectFill" :src="user.avatarUrl" />
+				<p class="sub-title">{{detail.phone}}</p>
 		</div>
 		<div class="inner">
 			<div class="item" @click="toCompany">
@@ -29,25 +29,42 @@
 </template>
 
 <script>
-	import Menu from '@/components/menu';
+	import Vue   from 'vue';
+	import store from '@/store';
+	import Menu  from '@/components/menu';
+
+	const {dispatch, commit, getters, state} = store;
 
 	export default{
 		name : 'profile',
 		data() {
 			return {
-				headUrl: '/static/imgs/headimg.jpg',
-				icon : {
-					firm : '/static/icon/firm.png',
-					award : '/static/icon/award.png',
-					convert: '/static/icon/convert.png',
-					location: '/static/icon/location.png',
-					service: '/static/icon/service.png'
+				headUrl : '/static/imgs/headimg.jpg',
+				icon    : {
+					firm     : '/static/icon/firm.png',
+					award    : '/static/icon/award.png',
+					convert  : '/static/icon/convert.png',
+					location : '/static/icon/location.png',
+					service  : '/static/icon/service.png'
 				}
 			}
 		},
 		components: {
 			'v-menu' : Menu
 		},
+		computed: {
+			user () {
+				console.log('state.User.user', state.User.user)
+	        	return state.User.user
+	        },
+	        detail() {
+	        	console.log('state.User.detail', state.User.detail)
+	        	return state.User.detail
+	        },
+	        token () {
+	        	return state.User.token
+	        },
+	    },
 		methods: {
 			toCompany() {
 				const url = '../company/main'

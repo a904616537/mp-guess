@@ -6,40 +6,10 @@
 			<div class="last">日收入</div>
 		</div>
 		<div class="form">
-			<tr>
-				<td>2018.10.15</td>
-				<td>3笔</td>
-				<td>¥200</td>
-			</tr>
-			<tr>
-				<td>2018.10.16</td>
-				<td>4笔</td>
-				<td>¥300</td>
-			</tr>
-			<tr>
-				<td>2018.10.17</td>
-				<td>4笔</td>
-				<td>¥200</td>
-			</tr>
-			<tr>
-				<td>2018.10.18</td>
-				<td>3笔</td>
-				<td>¥200</td>
-			</tr>
-			<tr>
-				<td>2018.10.19</td>
-				<td>3笔</td>
-				<td>¥200</td>
-			</tr>
-			<tr>
-				<td>2018.10.20</td>
-				<td>3笔</td>
-				<td>¥200</td>
-			</tr>
-			<tr>
-				<td>2018.10.21</td>
-				<td>2笔</td>
-				<td>¥200</td>
+			<tr v-for="(item, index) in data" :key="index">
+				<td>{{item._id.year}}.{{item._id.month}}.{{item._id.day}}</td>
+				<td>{{item.number}}笔</td>
+				<td>¥{{item.total}}</td>
 			</tr>
 		</div>
 	</div>
@@ -51,6 +21,12 @@
 		data() {
 			return {}
 
+		},
+		props : {
+			data : {
+				type    : Array,
+				default : () => ([])
+			}
 		}
 	}
 </script>

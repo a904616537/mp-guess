@@ -13,9 +13,7 @@ import * as getters from './getters'
 import Counter      from './module/counter'
 import User         from './module/user'
 import Banner       from './module/banner'
-import Question     from './module/question'
-import SystemInfo   from './module/system'
-
+import Order       from './module/order'
 
 
 Vue.use(Vuex)
@@ -27,8 +25,7 @@ const store = new Vuex.Store({
 		Counter,
 		User,
 		Banner,
-		Question,
-		SystemInfo
+		Order
 	},
 	// strict  : debug
 })

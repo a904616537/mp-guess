@@ -1,4 +1,5 @@
 <script>
+    
 import login_help from './utils/login_help';
 import store from './store'
 // const {dispatch, commit, getters, state} = Vue.store;
@@ -31,7 +32,7 @@ export default {
         wx.getSystemInfo({
             success(res) {
                 console.log('设备信息', res)
-                store.dispatch('onSetSystem', {width : res.windowWidth, height : res.windowHeight, system : res.system})
+                // store.dispatch('onSetSystem', {width : res.windowWidth, height : res.windowHeight, system : res.system})
             }
         })
     },
